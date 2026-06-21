@@ -59,9 +59,10 @@ export function GenerateWizard() {
       });
       setGeneratedScript(response.data.script);
       setScriptMetadata(response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error generating script:', error);
-      alert('حدث خطأ أثناء توليد السكريبت');
+      const msg = error.response?.data?.error || error.message || 'حدث خطأ أثناء توليد السكريبت';
+      alert('خطأ: ' + msg);
     } finally {
       setIsGeneratingScript(false);
     }
