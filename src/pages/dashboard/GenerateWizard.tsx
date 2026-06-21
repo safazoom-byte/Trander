@@ -8,6 +8,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
 import { ArrowRight, ArrowLeft, RefreshCw, CheckCircle2, Loader2, Play } from 'lucide-react';
 import axios from 'axios';
+import { supabase } from '@/lib/supabase/supabase';
+import { useAuth } from '@/lib/supabase/AuthProvider';
 
 const steps = [
   'اختيار الموضوع',
@@ -65,23 +67,38 @@ export function GenerateWizard() {
     }
   };
 
+  const { user } = useAuth();
+  
   const handleNext = async () => {
     if (currentStep === 1) {
-      // Going to step 2 means we generate the script if not already done
       if (!generatedScript) {
         await handleGenerateScript();
       }
       setCurrentStep(2);
     } else if (currentStep === 3) {
-      // Start full video generation fake process
       setIsGenerating(true);
       setCurrentStep(4);
       
-      // Simulate video generation pipeline phases
       setTimeout(() => setProgressStages(s => ({ ...s, audio: true })), 2000);
       setTimeout(() => setProgressStages(s => ({ ...s, media: true })), 4000);
       setTimeout(() => setProgressStages(s => ({ ...s, assemble: true })), 6000);
-      setTimeout(() => setProgressStages(s => ({ ...s, upload: true, done: true })), 8000);
+      setTimeout(async () => {
+        setProgressStages(s => ({ ...s, upload: true, done: true }));
+        // Save to supabase
+        if (user) {
+          try {
+            await supabase.from('videos').insert({
+              user_id: user.id,
+              title: keyword || 'فيديو جديد',
+              duration: duration + 's',
+              status: 'جاهز',
+              video_url: 'https://example.com/video.mp4',
+            });
+          } catch (e) {
+            console.error('Failed to save to database', e);
+          }
+        }
+      }, 8000);
     } else {
       setCurrentStep(prev => Math.min(4, prev + 1));
     }

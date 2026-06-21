@@ -1,9 +1,8 @@
 import { Outlet, Navigate, useLocation, Link, useNavigate } from 'react-router-dom';
 import { Activity, Clapperboard, Calendar, Settings as SettingsIcon, LayoutDashboard, LogOut, Video, Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/lib/firebase/AuthProvider';
-import { auth } from '@/lib/firebase/firebase';
-import { signOut } from 'firebase/auth';
+import { useAuth } from '@/lib/supabase/AuthProvider';
+import { supabase } from '@/lib/supabase/supabase';
 
 export function Layout() {
   const { user, loading } = useAuth();
@@ -20,7 +19,7 @@ export function Layout() {
   if (!user) return <Navigate to="/login" replace />;
 
   const handleSignOut = async () => {
-    await signOut(auth);
+    await supabase.auth.signOut();
     navigate('/login');
   };
 

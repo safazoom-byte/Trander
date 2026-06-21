@@ -13,7 +13,7 @@ import { GenerateWizard } from './pages/dashboard/GenerateWizard';
 import { Library } from './pages/dashboard/Library';
 import { Schedule } from './pages/dashboard/Schedule';
 import { Settings } from './pages/dashboard/Settings';
-import { AuthProvider } from '@/lib/firebase/AuthProvider';
+import { AuthProvider } from '@/lib/supabase/AuthProvider';
 
 export default function App() {
   return (
