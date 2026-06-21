@@ -1,0 +1,6 @@
+{
+  "name": "Trander (ترندر)",
+  "description": "منصة فيديوهات الترند التلقائية بالعربي",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
